@@ -214,7 +214,7 @@ nx.draw(G)
 plt.savefig( 'asd.png' )
 plt.show()
 
-from matplotlib.pyplot as plt
+
 
 
 

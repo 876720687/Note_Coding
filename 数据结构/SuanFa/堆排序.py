@@ -1,4 +1,4 @@
-def sift(li ,low ,high): # 实现了建堆的过程
+def sift(li ,low ,high): # 实现了建堆的过程,大根堆
     """
     li：列表
     low：堆根节点的位置
@@ -38,7 +38,10 @@ def heap_sort(li):
 li = [i for i in range(100)]
 import random
 random.shuffle(li)
-
+print(li)
 heap_sort(li)
 
-
+"""
+堆排序拥有内置模块 heapq
+"""
+import heapq

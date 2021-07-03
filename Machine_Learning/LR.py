@@ -52,3 +52,14 @@ iris_target_part = iris_target[:100]
 
 ## 测试集大小为20%， 80%/20%分
 x_train, x_test, y_train, y_test = train_test_split(iris_features_part, iris_target_part, test_size = 0.2, random_state = 2020)
+
+
+from sklearn.datasets import load_iris
+from sklearn.linear_model import LogisticRegression
+X, y = load_iris(return_X_y=True)
+# clf = LogisticRegression(random_state=0).fit(X, y)
+clf = LogisticRegression(random_state=0, max_iter=500).fit(X, y)
+clf.predict(X[:2, :])
+clf.predict_proba(X[:2, :])
+clf.score(X, y)
+

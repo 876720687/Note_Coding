@@ -44,7 +44,7 @@ class GlyphMap:
 		self.image_format = image_format
 
 
-# Based on http://www.microsoft.com/typography/otspec/ebdt.htm
+# Based on http://www.microsoft.com/typography/otspec/ebdt.html
 class CBDT:
 
 	def __init__ (self, font_metrics, options = (), stream = None):

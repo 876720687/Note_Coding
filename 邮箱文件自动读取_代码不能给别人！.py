@@ -137,12 +137,15 @@ resp, mails, octets = server.list()
 
 # 倒序遍历邮件
 index = len(mails)
+if index > 100:
+    index = 100
+
 for i in range(index, 0, -1):
     # lines存储了邮件的原始文本的每一行
     resp, lines, octets = server.retr(i)
 
     # 邮件的原始文本:
-    msg_content = b'\r\n'.join(lines).decode('utf-8')
+    msg_content = b'\r\n'.join(lines).decode('unicode_escape')
 
     # 解析邮件:
     msg = Parser().parsestr(msg_content)

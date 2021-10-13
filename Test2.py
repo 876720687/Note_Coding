@@ -1,17 +1,22 @@
-
-import math
+import sklearn
+# 导入高斯朴素贝叶斯分类器
+from sklearn.naive_bayes import GaussianNB
+from sklearn.model_selection import train_test_split
 import numpy as np
-from scipy.stats import chi2, f, t, norm
-from matplotlib import pyplot as plt
+import pandas as pd
+from sklearn.datasets import load_iris
 
-pltchi2 = plt.figure()
-# 生成x轴数据空间
-x = np.linspace(0, 100, 100000).tolist()
-
-# 画出自由度n, 20 至 60 的卡方分布概率密度函数图像
-# ***** begin ***** #
-y=[]
-for i in range(len(x)):
-    y.append(pow(i,2))
-plt.plot(x,y)
-plt.show()
+def knn_test():
+    # data_url = "/data/workspace/myshixun/step1/iris_train.csv"
+    df = load_iris()
+    X = df.iloc[:,1:4]
+    y=df.iloc[:,4]
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+    # 使用高斯朴素贝叶斯进行计算
+    ######## Begin ########
+    clf=GaussianNB()
+    ######## End ########
+    clf.fit(X_train, y_train)
+    # 评估
+    y_pred = clf.predict(X_test)
+    acc = np.sum(y_test == y_p

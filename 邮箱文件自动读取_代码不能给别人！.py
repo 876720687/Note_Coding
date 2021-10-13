@@ -101,7 +101,7 @@ def get_att(msg):
                 print(filename)
                 # filename = filename.encode("utf-8")
             data = part.get_payload(decode=True)  # 下载附件
-            att_file = open('D:\\数模作业\\' + filename, 'wb')  # 在指定目录下创建文件，注意二进制文件需要用wb模式打开
+            att_file = open('D:\\保存代码\\' + filename, 'wb')  # 在指定目录下创建文件，注意二进制文件需要用wb模式打开
             attachment_files.append(filename)
             att_file.write(data)  # 保存附件
             att_file.close()
@@ -152,6 +152,8 @@ for i in range(index, 0, -1):
 
     # 获取附件
     f_list = get_att(msg)
+
+    print("附件获取完成")
 
 print("文件已下载完成，10秒后关闭程序！")
 time.sleep(10)

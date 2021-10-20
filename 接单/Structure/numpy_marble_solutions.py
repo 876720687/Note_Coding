@@ -241,10 +241,10 @@ if __name__ == '__main__':
     # 这整个部分将需要进行重大更改。 这里只是一些加载和操作数组的例子。
 
     # 加载一个“block”的可变密度大理石:
-    marble_block_1 = np.load(file='E:/CODE/ProgrammingProgect/pythoncoding/demo1/Money1/marble_block_1.npy')
+    marble_block_1 = np.load(file='/接单/Structure/marble_block_1.npy')
 
     # 加载一个数组来描述我们想要用大理石雕刻的雕塑的 3D 形状:
-    shape_1 = np.load(file='E:/CODE/ProgrammingProgect/pythoncoding/demo1/Money1/shape_1.npy')
+    shape_1 = np.load(file='/接单/Structure/shape_1.npy')
 
     print(marble_block_1.shape)
     print(shape_1.shape)

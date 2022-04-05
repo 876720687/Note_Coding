@@ -19,4 +19,4 @@ def knn_test():
     clf.fit(X_train, y_train)
     # 评估
     y_pred = clf.predict(X_test)
-    acc = np.sum(y_test == y_p
+    # acc = np.sum(y_test == y_p

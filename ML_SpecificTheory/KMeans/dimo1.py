@@ -6,6 +6,7 @@ Created on Fri Aug 27 13:54:24 2021
 """
 
 import numpy as np
+
 c1x=np.random.uniform(0.5,1.5,(1,10))
 c1y=np.random.uniform(0.5,1.5,(1,10))
 c2x=np.random.uniform(3.5,4.5,(1,10))

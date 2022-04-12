@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from ML_basic_function import *
 
 ###########1.数据生成部分##########
 def f(x1, x2):

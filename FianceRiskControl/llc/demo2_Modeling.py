@@ -86,8 +86,8 @@ def cv_model(clf, train_x, train_y, test_x, clf_name):
                       }
 
             watchlist = [(train_matrix, 'train'), (valid_matrix, 'eval')]
-            plst = list(params.items())
-            model = xgb.train(plst,
+            # plst = list(params.items())
+            model = clf.train(params,
                               train_matrix,
                               num_boost_round=50000,
                               evals=watchlist,
@@ -145,16 +145,16 @@ def cv_model(clf, train_x, train_y, test_x, clf_name):
 #     return lgb_train, lgb_test
 # lgb_train, lgb_test = lgb_model(x_train, y_train, x_test)
 
-def xgb_model(x_train, y_train, x_test):
-    xgb_train, xgb_test = cv_model(xgb, x_train, y_train, x_test, "xgb")
-    return xgb_train, xgb_test
-
-xgb_train, xgb_test = xgb_model(x_train, y_train, x_test)
-
-
-# def cat_model(x_train, y_train, x_test):
-#     cat_train, cat_test = cv_model(cat, x_train, y_train, x_test, "cat")
-#     return cat_train, cat_test
+# def xgb_model(x_train, y_train, x_test):
+#     xgb_train, xgb_test = cv_model(xgb, x_train, y_train, x_test, "xgb")
+#     return xgb_train, xgb_test
 #
-# cat_train, cat_test = cat_model(x_train, y_train, x_test)
+# xgb_train, xgb_test = xgb_model(x_train, y_train, x_test)
+
+
+def cat_model(x_train, y_train, x_test):
+    cat_train, cat_test = cv_model(cat, x_train, y_train, x_test, "cat")
+    return cat_train, cat_test
+
+cat_train, cat_test = cat_model(x_train, y_train, x_test)
 

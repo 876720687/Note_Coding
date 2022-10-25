@@ -116,8 +116,7 @@ def cv_model(clf, train_x, train_y, test_x, clf_name):
                       'random_seed': 11,
                       'allow_writing_files': False}
             # 定义模型
-            # model = CatBoostClassifier(iterations=1000, **params)
-            model = clf(**params,iterations=1000)
+            model = CatBoostClassifier(iterations=1000, **params)
             model.fit(trn_x, trn_y, eval_set=(val_x, val_y),
                       cat_features=[], use_best_model=True, verbose=500)
 

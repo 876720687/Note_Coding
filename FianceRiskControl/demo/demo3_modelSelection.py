@@ -18,7 +18,7 @@ from sklearn.metrics import roc_auc_score
 import numpy as np
 import xgboost as xgb
 import lightgbm as lgb
-from catboost import CatBoostRegressor
+from catboost import CatBoostRegressor, CatBoostClassifier
 from sklearn.linear_model import Lasso, LassoCV, LassoLarsCV
 from sklearn.svm import SVC
 from sklearn.svm import LinearSVC  # 支持向量机
@@ -126,7 +126,7 @@ def cv_model(clf, train_x, train_y, test_x, clf_name):
             params = {'learning_rate': 0.05, 'depth': 5, 'l2_leaf_reg': 10, 'bootstrap_type': 'Bernoulli',
                       'od_type': 'Iter', 'od_wait': 50, 'random_seed': 11, 'allow_writing_files': False}
 
-            model = clf(iterations=20000, **params)
+            model = CatBoostClassifier(iterations=1000, **params)
             model.fit(trn_x, trn_y, eval_set=(val_x, val_y), cat_features=[], use_best_model=True, verbose=500)
 
             val_pred = model.predict(val_x)

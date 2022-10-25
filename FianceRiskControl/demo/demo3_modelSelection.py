@@ -151,66 +151,66 @@ def lgb_model(x_train, y_train, x_test):
     return lgb_train, lgb_test
 
 
-def xgb_model(x_train, y_train, x_test):
-    xgb_train, xgb_test = cv_model(xgb, x_train, y_train, x_test, "xgb")
-    return xgb_train, xgb_test
-
-
-def cat_model(x_train, y_train, x_test):
-    cat_train, cat_test = cv_model(CatBoostRegressor, x_train, y_train, x_test, "cat")
-    return cat_train, cat_test
+# def xgb_model(x_train, y_train, x_test):
+#     xgb_train, xgb_test = cv_model(xgb, x_train, y_train, x_test, "xgb")
+#     return xgb_train, xgb_test
+#
+#
+# def cat_model(x_train, y_train, x_test):
+#     cat_train, cat_test = cv_model(CatBoostRegressor, x_train, y_train, x_test, "cat")
+#     return cat_train, cat_test
 
 
 
 
 lgb_train, lgb_test = lgb_model(x_train, y_train, x_test)
-xgb_train, xgb_test = xgb_model(x_train, y_train, x_test)
-cat_train, cat_test = cat_model(x_train, y_train, x_test)
+# xgb_train, xgb_test = xgb_model(x_train, y_train, x_test)
+# cat_train, cat_test = cat_model(x_train, y_train, x_test)
 
 
-
-
-def modelReturn(model, name):
-    model = RandomForestClassifier()
-    model.fit(x_train, y_train)
-    predict = model.predict(x_test)
-    trueNum = 0
-    for i in range(len(y_test)):
-        if (y_test[i] == predict[i]):
-            trueNum += 1
-    print(name, ":", trueNum / len(y_test))
-
-
-
-
-# xgboost 46 50
-model = XGBClassifier()
-modelReturn(model, "xgboost")
-# GBDT 40 -48
-model = GradientBoostingClassifier()
-modelReturn(model, "GBDT")
-
-# 随机森林  44-46
-model = RandomForestClassifier()
-modelReturn(model, "RFC")
-
-# 决策树  36-39
-model = DecisionTreeClassifier()
-modelReturn(model, "决策树")
-
-# 朴素也贝斯 44-51
-model = MultinomialNB()
-modelReturn(model, "朴素贝页斯")
-
-# 支持向量机  45-48
-model = LinearSVC()
-modelReturn(model, "支持向量机")
-
-# SVM  48-52
-model = SVC()
-modelReturn(model, "SVM")
-
-# laoss   68-73%
-model = Lasso(alpha=0.005)  # 调节aplha 可以实现对拟合的。的程度
-modelReturn(model, "laoss")
-
+#
+#
+# def modelReturn(model, name):
+#     model = RandomForestClassifier()
+#     model.fit(x_train, y_train)
+#     predict = model.predict(x_test)
+#     trueNum = 0
+#     for i in range(len(y_test)):
+#         if (y_test[i] == predict[i]):
+#             trueNum += 1
+#     print(name, ":", trueNum / len(y_test))
+#
+#
+#
+#
+# # xgboost 46 50
+# model = XGBClassifier()
+# modelReturn(model, "xgboost")
+# # GBDT 40 -48
+# model = GradientBoostingClassifier()
+# modelReturn(model, "GBDT")
+#
+# # 随机森林  44-46
+# model = RandomForestClassifier()
+# modelReturn(model, "RFC")
+#
+# # 决策树  36-39
+# model = DecisionTreeClassifier()
+# modelReturn(model, "决策树")
+#
+# # 朴素也贝斯 44-51
+# model = MultinomialNB()
+# modelReturn(model, "朴素贝页斯")
+#
+# # 支持向量机  45-48
+# model = LinearSVC()
+# modelReturn(model, "支持向量机")
+#
+# # SVM  48-52
+# model = SVC()
+# modelReturn(model, "SVM")
+#
+# # laoss   68-73%
+# model = Lasso(alpha=0.005)  # 调节aplha 可以实现对拟合的。的程度
+# modelReturn(model, "laoss")
+#

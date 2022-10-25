@@ -1,8 +1,9 @@
 import pandas as pd
 # import lightgbm as lgb
-import xgboost as xgb
+# import xgboost as xgb
 import catboost as cat
 from catboost import CatBoostClassifier
+
 from sklearn.model_selection import KFold
 import numpy as np
 from sklearn.metrics import roc_auc_score
@@ -31,11 +32,11 @@ def cv_model(clf, train_x, train_y, test_x, clf_name):
     cv_scores = []
 
     for i, (train_index, valid_index) in enumerate(kf.split(train_x, train_y)):
-        print('************************************ {} ************************************'.format(str(i + 1)))
-        trn_x, trn_y, val_x, val_y = train_x.iloc[train_index], train_y[train_index], train_x.iloc[valid_index], \
-                                     train_y[valid_index]
+        print('********************** {} **********************'.format(str(i + 1)))
+        trn_x, trn_y, val_x, val_y = train_x.iloc[train_index], train_y[train_index], train_x.iloc[valid_index], train_y[valid_index]
 
         if clf_name == "lgb":
+
             train_matrix = clf.Dataset(trn_x, label=trn_y)
             valid_matrix = clf.Dataset(val_x, label=val_y)
 
@@ -115,9 +116,8 @@ def cv_model(clf, train_x, train_y, test_x, clf_name):
                       'random_seed': 11,
                       'allow_writing_files': False}
             # 定义模型
-            model = CatBoostClassifier(iterations=1000, **params)
-            # model = clf.train(iterations=1000,
-            #                   **params)
+            # model = CatBoostClassifier(iterations=1000, **params)
+            model = clf(**params,iterations=1000)
             model.fit(trn_x, trn_y, eval_set=(val_x, val_y),
                       cat_features=[], use_best_model=True, verbose=500)
 

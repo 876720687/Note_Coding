@@ -13,40 +13,41 @@ infinity or a value too large for dtype('float32').
 # ------------------模型训练----------------------------
 import pandas as pd
 from sklearn.model_selection import KFold
-import numpy as np
 from sklearn.metrics import roc_auc_score
-from sklearn.model_selection import train_test_split
 
-train_data = pd.read_csv("train_data.csv")
-
-y_train = train_data['isDefault']
-x_train = train_data.drop(columns='isDefault', axis=1)
-x_test = pd.read_csv("x_test.csv")
-
-# df_norm = (x_train - x_train.min()) / (x_train.max() - x_train.min())
-
-x_train, x_test, y_train, y_test = train_test_split(x_train, y_train)
-
-"""
-# def cv_model()
-
-import lightgbm as lgb
+import numpy as np
 import xgboost as xgb
+import lightgbm as lgb
+from catboost import CatBoostRegressor
+from sklearn.linear_model import Lasso, LassoCV, LassoLarsCV
+from sklearn.svm import SVC
+from sklearn.svm import LinearSVC  # 支持向量机
+from sklearn.naive_bayes import MultinomialNB  # 朴素也贝斯
+from sklearn.tree import DecisionTreeClassifier  # 决策树
+from sklearn.ensemble import RandomForestClassifier  # 随机森铃
+from sklearn.ensemble import GradientBoostingClassifier  # GBDT
+from xgboost import XGBClassifier  # xgboost
 
-from sklearn.model_selection import StratifiedKFold, KFold
 
-lgb_train, lgb_test = lgb_model(x_train, y_train, x_test)
-xgb_train, xgb_test = xgb_model(x_train, y_train, x_test)
+# TODO 全局运行
+# train_data = pd.read_csv("train_data.csv")
+#
+# y_train = train_data['isDefault']
+# x_train = train_data.drop(columns='isDefault', axis=1)
+# x_test = pd.read_csv("x_test.csv")
+#
+# # df_norm = (x_train - x_train.min()) / (x_train.max() - x_train.min())
+#
+# x_train, x_test, y_train, y_test = train_test_split(x_train, y_train)
 
-# 特征交互这个地方似乎有一点问题。导致最终的模型训练不成功。
+# TODO 小样本
+data_train = pd.read_csv('../data/train_data.csv')
+data_test_a = pd.read_csv('../data/test_data.csv')
+features = [f for f in data_train.columns if f not in ['id','issueDate','isDefault'] and '_outliers' not in f]
+x_train = data_train[features]
+x_test = data_test_a[features]
+y_train = data_train['isDefault']
 
-# 但是这并不影响后面建模的内容。进行第四部分的测试。
-
-a = train.drop(['isDefault'], axis=1)
-# b=[a,testA]
-b = pd.concat([a, testA], axis=0)
-b.to_csv(r"E:\CODE\ProgrammingProgect\pythoncoding\基于数据分析的金融风控预测（毕业设计）\baseline\data_for_model.csv")
-"""
 
 
 def cv_model(clf, train_x, train_y, test_x, clf_name):
@@ -117,6 +118,8 @@ def cv_model(clf, train_x, train_y, test_x, clf_name):
             model = clf.train(params, train_matrix, num_boost_round=50000, evals=watchlist, verbose_eval=200,
                               early_stopping_rounds=200)
             val_pred = model.predict(valid_matrix, ntree_limit=model.best_ntree_limit)
+            if isinstance(test_x, pd.DataFrame):
+                test_x = clf.DMatrix(test_x)
             test_pred = model.predict(test_x, ntree_limit=model.best_ntree_limit)
 
         if clf_name == "cat":
@@ -133,16 +136,14 @@ def cv_model(clf, train_x, train_y, test_x, clf_name):
         test = test_pred / kf.n_splits
         cv_scores.append(roc_auc_score(val_y, val_pred))
 
-        print(cv_scores)
+        print("cv_scores : {}".format(cv_scores))
 
     print("%s_scotrainre_list:" % clf_name, cv_scores)
     print("%s_score_mean:" % clf_name, np.mean(cv_scores))
     print("%s_score_std:" % clf_name, np.std(cv_scores))
     return train, test
 
-import xgboost as xgb
-import lightgbm as lgb
-from catboost import CatBoostRegressor
+
 
 
 def lgb_model(x_train, y_train, x_test):
@@ -160,25 +161,13 @@ def cat_model(x_train, y_train, x_test):
     return cat_train, cat_test
 
 
+
+
 lgb_train, lgb_test = lgb_model(x_train, y_train, x_test)
 xgb_train, xgb_test = xgb_model(x_train, y_train, x_test)
-# cat_train, cat_test = cat_model(x_train, y_train, x_test)
+cat_train, cat_test = cat_model(x_train, y_train, x_test)
 
-import numpy as np
-import pandas
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.decomposition import PCA
-import matplotlib.pyplot as plt
 
-from sklearn.linear_model import Lasso, LassoCV, LassoLarsCV
-from sklearn.svm import SVC
-from sklearn.svm import LinearSVC  # 支持向量机
-from sklearn.naive_bayes import MultinomialNB  # 朴素也贝斯
-from sklearn.tree import DecisionTreeClassifier  # 决策树
-from sklearn.ensemble import RandomForestClassifier  # 随机森铃
-from sklearn.ensemble import GradientBoostingClassifier  # GBDT
-from xgboost import XGBClassifier  # xgboost
 
 
 def modelReturn(model, name):
@@ -211,7 +200,7 @@ modelReturn(model, "决策树")
 
 # 朴素也贝斯 44-51
 model = MultinomialNB()
-modelReturn(model, "朴素也贝斯")
+modelReturn(model, "朴素贝页斯")
 
 # 支持向量机  45-48
 model = LinearSVC()
@@ -225,43 +214,3 @@ modelReturn(model, "SVM")
 model = Lasso(alpha=0.005)  # 调节aplha 可以实现对拟合的。的程度
 modelReturn(model, "laoss")
 
-"""
-model.fit(x_train,y_train);
-
-predict =model.predict(x_test);
-
-trueNum =0;
-
-print(predict)
-
-for i  in range(len(y_test)):
-    if ((abs(y_test[i])-abs(predict[i])< 0.5)):
-        trueNum += 1;
-
-
-print(trueNum/len(y_test));
-"""
-"""
-pca = PCA(n_components=27);
-xTrainPca = pca.fit_transform(x_train);
-xTestPca = pca.fit_transform(x_test);
-
-
-log =LogisticRegression();
-log.fit(xTrainPca,y_train);
-
-print("准确率:",log.score(xTestPca,y_test));
-"""
-
-"""
-#降到10个维度
-pca = PCA(n_components=50);
-
-xTrainPca = pca.fit_transform(x_train);
-xTestPca = pca.fit_transform(x_test);
-
-knn = KNeighborsClassifier(n_neighbors=11);
-knn.fit(xTrainPca,y_train);
-
-print(knn.score(xTestPca,y_test))
-"""

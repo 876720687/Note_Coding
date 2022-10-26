@@ -4,7 +4,7 @@ from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
 from sklearn.naive_bayes import MultinomialNB
-from sklearn.svm import LinearSVC, SVC
+from sklearn.svm import LinearSVC
 from sklearn.tree import DecisionTreeClassifier
 from xgboost import XGBClassifier
 from sklearn.linear_model import Lasso
@@ -19,6 +19,7 @@ y_train = data_train['isDefault']
 
 train_x, val_x, train_y, val_y = train_test_split(x_train, y_train, test_size=0.2)
 
+#lgb
 train_matrix = lgb.Dataset(train_x, label=train_y)
 valid_matrix = lgb.Dataset(val_x, label=val_y)
 
@@ -57,7 +58,6 @@ roc_auc = metrics.auc(fpr, tpr)
 print('调参后lightgbm单模型在验证集上的AUC：{}'.format(roc_auc))
 """对测试集进行预测"""
 test_pred = model.predict(x_test, num_iteration=model.best_iteration)
-# print(list(sorted(zip(features, model.feature_importance("gain")), key=lambda x: x[1], reverse=True))[:20])
 
 
 def modelReturn(model,train_x,train_y,val_x,val_y):
@@ -65,7 +65,7 @@ def modelReturn(model,train_x,train_y,val_x,val_y):
     val_pred = model.predict(val_x)
     fpr, tpr, threshold = metrics.roc_curve(val_y, val_pred)
     roc_auc = metrics.auc(fpr, tpr)
-    print('model name {}'.format(roc_auc))
+    print('model name{} and roc_auc is {}'.format(model,roc_auc))
 
 model_list = [XGBClassifier(),GradientBoostingClassifier(),RandomForestClassifier(),DecisionTreeClassifier(),MultinomialNB(),LinearSVC(),Lasso(alpha=0.005)]
 

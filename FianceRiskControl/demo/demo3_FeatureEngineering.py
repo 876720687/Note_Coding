@@ -6,15 +6,12 @@
 # 特征工程
 # 和上面代码所使用的 train 和 test_a 不同，这里使用的是data_train 和 data_test_a
 import pandas as pd
-
 import numpy as np
-import datetime
 pd.set_option('display.max_columns', None)
 
 # TODO 小样本
 data_train = pd.read_csv('../data/train_data.csv', encoding="gbk", nrows=7500)
 data_test_a = pd.read_csv('../data/test_data.csv', encoding="gbk", nrows=2500)
-
 
 
 
@@ -68,8 +65,6 @@ for df in [data_train, data_test_a]:
 
 
 
-
-
 # -------------------------------------特征选择---------------------------------
 # 特征交互实现了升维，这里要开始降维了
 """
@@ -85,12 +80,6 @@ for df in [data_train, data_test_a]:
 基于惩罚项的特征选择法
 基于树模型的特征选择
 """
-
-# 终于要选择特征了、这里要不还是用下因子分析？层次分析法？主成分分析法？
-
-# from sklearn.feature_selection import VarianceThreshold
-# #其中参数threshold为方差的阈值
-# VarianceThreshold(threshold=3).fit_transform(train,target_train)
 
 
 # 删除不需要的数据
@@ -110,14 +99,6 @@ result = pd.DataFrame(columns=['features', 'corr'])
 result['features'] = data_corr.index
 result['corr'] = data_corr.values
 
-# ------------------------相关性可视化--------------------------
-# data_numeric = data_train[numerical_fea]
-# correlation = data_numeric.corr()
-# 
-# f, ax = plt.subplots(figsize=(7, 7))
-# plt.title('Correlation of Numeric Features with Price', y=1, size=16)
-# sns.heatmap(correlation, square=True, vmax=0.8)
-
 # ---------------------获取有效特征------------------------
 features = [f for f in data_train.columns if f not in ['id', 'issueDate', 'isDefault'] and '_outliers' not in f]
 x_train = data_train[features]
@@ -126,21 +107,7 @@ y_train = data_train['isDefault']
 
 train_data = pd.concat([x_train, y_train], axis=1)
 
-
-
 # ---------------------保存数据---------------------------
 
-train_data.to_csv("train_data.csv", index=0)
-x_test.to_csv("x_test.csv", index=0)
-
-
-
-
-
-
-
-
-
-
-
-
+train_data.to_csv("../data/train_data_feture.csv", index=0)
+x_test.to_csv("../data/test_data_feture.csv", index=0)

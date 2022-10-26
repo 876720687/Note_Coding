@@ -75,6 +75,30 @@ for col in tqdm(['employmentTitle', 'postCode', 'title','subGrade']):
     data_test_a[col] = le.transform(list(data_test_a[col].astype(str).values))
 print('Label Encoding 完成')
 
+# ------------------- 异常值处理--------------------
+#获取异常数据
+def find_outliers_by_3segama(data,fea):
+    data_std = np.std(data[fea])
+    data_mean = np.mean(data[fea])
+    outliers_cut_off = data_std * 3
+    lower_rule = data_mean - outliers_cut_off
+    upper_rule = data_mean + outliers_cut_off
+    data[fea+'_outliers'] = data[fea].apply(lambda x:str('异常值') if x > upper_rule or x < lower_rule else '正常值')
+    return data
+for fea in numerical_fea:
+    data_train = find_outliers_by_3segama(data_train,fea)
+    print(data_train[fea+'_outliers'].value_counts())
+    print(data_train.groupby(fea+'_outliers')['isDefault'].sum())
+    print('*'*10)
+
+#删除异常值
+for fea in numerical_fea:
+    data_train = data_train[data_train[fea+'_outliers']=='正常值']
+    data_train = data_train.reset_index(drop=True)
+
+
+
+
 #
 # for data in [data_train, data_test_a]:
 #     data.drop(['issueDate','id'], axis=1,inplace=True)

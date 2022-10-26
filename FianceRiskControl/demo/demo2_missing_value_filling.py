@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*- 
+# @Time : 2022/10/26 13:47 
+# @Author : YeMeng 
+# @File : demo2_missing_value_filling.py.py 
+# @contact: 876720687@qq.com
 import pandas as pd
 import numpy as np
 import datetime
@@ -70,12 +75,11 @@ for col in tqdm(['employmentTitle', 'postCode', 'title','subGrade']):
     data_test_a[col] = le.transform(list(data_test_a[col].astype(str).values))
 print('Label Encoding 完成')
 
-#删除无关的特征值
-for data in [data_train, data_test_a]:
-    data.drop(['issueDate','id'], axis=1,inplace=True)
+#
+# for data in [data_train, data_test_a]:
+#     data.drop(['issueDate','id'], axis=1,inplace=True)
 
 
 #填充后的数据进行保存
 data_train.to_csv('../data/train_data.csv',index=0)
 data_test_a.to_csv('../data/test_data.csv',index=0)
-

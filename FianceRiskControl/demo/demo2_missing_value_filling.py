@@ -16,6 +16,9 @@ data_train = pd.read_csv('../data/train.csv',nrows=10000)
 data_test_a = pd.read_csv('../data/testA.csv', nrows=2500)
 
 
+
+
+# -------------------------------------数值填充-----------------------------------
 # 找出变量中的类别特征和数值特征(数值特征变量可以直接入模)
 numerical_fea = list(data_train.select_dtypes(exclude=['object']).columns)
 category_fea = list(filter(lambda x: x not in numerical_fea,list(data_train.columns)))
@@ -30,6 +33,10 @@ data_test_a[numerical_fea] = data_test_a[numerical_fea].fillna(data_train[numeri
 data_train[category_fea] = data_train[category_fea].fillna(data_train[category_fea].mode())
 data_test_a[category_fea] = data_test_a[category_fea].fillna(data_train[category_fea].mode())
 
+
+
+
+# -------------------------------------时间格式特征处理-----------------------------------
 #转化成时间格式
 for data in [data_train, data_test_a]:
     data['issueDate'] = pd.to_datetime(data['issueDate'],format='%Y-%m-%d')
@@ -59,7 +66,10 @@ data_test_a[category_fea] = data_test_a[category_fea].fillna(data_train[category
 for data in [data_train, data_test_a]:
     data['earliesCreditLine'] = data['earliesCreditLine'].apply(lambda s: int(s[-4:]))
 
-#对类别型特征处理
+
+
+# -------------------------------------类别型特征处理-----------------------------------
+
 for data in [data_train, data_test_a]:
     data['grade'] = data['grade'].map({'A':1,'B':2,'C':3,'D':4,'E':5,'F':6,'G':7})
 # 类型数在2之上，又不是高维稀疏的,且纯分类特征
@@ -75,8 +85,9 @@ for col in tqdm(['employmentTitle', 'postCode', 'title','subGrade']):
     data_test_a[col] = le.transform(list(data_test_a[col].astype(str).values))
 print('Label Encoding 完成')
 
-# ------------------- 异常值处理--------------------
-#获取异常数据
+
+
+# -------------------------------------异常值处理-----------------------------------
 def find_outliers_by_3segama(data,fea):
     data_std = np.std(data[fea])
     data_mean = np.mean(data[fea])
@@ -90,7 +101,6 @@ for fea in numerical_fea:
     print(data_train[fea+'_outliers'].value_counts())
     print(data_train.groupby(fea+'_outliers')['isDefault'].sum())
     print('*'*10)
-
 #删除异常值
 for fea in numerical_fea:
     data_train = data_train[data_train[fea+'_outliers']=='正常值']
@@ -99,7 +109,8 @@ for fea in numerical_fea:
 
 
 
-#
+
+# Those two is use to output the submission profile
 # for data in [data_train, data_test_a]:
 #     data.drop(['issueDate','id'], axis=1,inplace=True)
 

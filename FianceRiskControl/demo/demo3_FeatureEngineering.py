@@ -4,7 +4,6 @@
 # datetime： 2022/4/21 20:14
 
 # 特征工程
-# 和上面代码所使用的 train 和 test_a 不同，这里使用的是data_train 和 data_test_a
 import pandas as pd
 import numpy as np
 pd.set_option('display.max_columns', None)
@@ -13,38 +12,16 @@ pd.set_option('display.max_columns', None)
 data_train = pd.read_csv('../data/train_data.csv', encoding="gbk", nrows=7500)
 data_test_a = pd.read_csv('../data/test_data.csv', encoding="gbk", nrows=2500)
 
-
-
 numerical_fea = list(data_train.select_dtypes(exclude=['object']).columns)
 category_fea = list(filter(lambda x: x not in numerical_fea, list(data_train.columns)))
 numerical_fea.remove('isDefault')
 
-
-# --------------------------处理异常值，这个是补齐之后再清洗处理-----------------------------------------
-def find_outliers_by_3segama(data, fea):
-    data_std = np.std(data[fea])
-    data_mean = np.mean(data[fea])
-    outliers_cut_off = data_std * 3
-    lower_rule = data_mean - outliers_cut_off
-    upper_rule = data_mean + outliers_cut_off
-    data[fea + '_outliers'] = data[fea].apply(lambda x: str('异常值') if x > upper_rule or x < lower_rule else '正常值')
-    return data
-
-
-# 删除异常值，只处理了训练集
-for fea in numerical_fea:
-    data_train = find_outliers_by_3segama(data_train, fea)
-    print(data_train[fea + '_outliers'].value_counts())
-    print(data_train.groupby(fea + '_outliers')['isDefault'].sum())
-    print('*' * 10)
+# -------------------------------------特征交互-----------------------------------
+# 构建有效特征变量
 
 
 # -------------------------------------特征交互-----------------------------------
 # 特征交互是为了啥，交互完了之后data_train也变得很奇怪了，为什么要用这样的显示方式？
-# 删除异常值
-for fea in numerical_fea:
-    data_train = data_train[data_train[fea + '_outliers'] == '正常值']
-    data_train = data_train.reset_index(drop=True)
 
 for col in ['grade', 'subGrade']:
     temp_dict = data_train.groupby([col])['isDefault'].agg(['mean']).reset_index().rename(
@@ -81,14 +58,9 @@ for df in [data_train, data_test_a]:
 基于树模型的特征选择
 """
 
-
-# 删除不需要的数据
-for data in [data_train, data_test_a]:
-    data.drop(['issueDate','id'], axis=1,inplace=True)
-
 # # "纵向用缺失值上面的值替换缺失值"
 # # 而且是无限向下填充
-data_train = data_train.fillna(axis=0, method='ffill')
+# data_train = data_train.fillna(axis=0, method='ffill')
 
 # x_train = data_train.drop(['isDefault', 'id'], axis=1)
 x_train = data_train.drop(['isDefault'], axis=1)
@@ -108,6 +80,5 @@ y_train = data_train['isDefault']
 train_data = pd.concat([x_train, y_train], axis=1)
 
 # ---------------------保存数据---------------------------
-
 train_data.to_csv("../data/train_data_feture.csv", index=0)
 x_test.to_csv("../data/test_data_feture.csv", index=0)

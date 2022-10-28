@@ -29,8 +29,8 @@ df0 = pd.read_csv('./input/sample_submission.csv')
 data_test = data_test['full_text']
 
 # -------------------- 数据向量化 -----------------------
-X_train=df['full_text']
-y_train=np.array(df.iloc[:,2:])
+X_train = df['full_text']
+y_train = np.array(df.iloc[:,2:])
 tokenizer = Tokenizer(num_words=10000, split=' ')
 tokenizer.fit_on_texts(X_train.values)
 X_train = tokenizer.texts_to_sequences(X_train.values)

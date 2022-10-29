@@ -40,6 +40,7 @@ data_test = pad_sequences(data_test)
 X_train,X_val,y_train,y_val=train_test_split(X_train,y_train,test_size=0.1)
 
 # -------------------- 构建模型 -----------------------
+
 model=Sequential()
 model = keras.Sequential()
 # Add an Embedding layer expecting input vocab of size 5000, and

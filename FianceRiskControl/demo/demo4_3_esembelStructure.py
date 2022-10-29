@@ -1,8 +1,14 @@
-# -*- coding: utf-8 -*- 
-# @Time : 2022/10/26 12:38 
-# @Author : YeMeng 
-# @File : demo7_esemble.py 
-# @contact: 876720687@qq.com
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# author： Leo
+# datetime： 2022/4/23 11:55
+
+
+"""
+ValueError: Input contains NaN,
+infinity or a value too large for dtype('float32').
+
+"""
 import pandas as pd
 from heamy.pipeline import ModelsPipeline
 from sklearn import metrics
@@ -115,6 +121,7 @@ stack_ds = pipeline.stack(k=5, seed=111, full_test=True)
 # 第二层使用逻辑回归进行stack
 LogisticRegression(solver='lbfgs')
 stacker = Classifier(dataset=stack_ds, estimator=LogisticRegression, parameters={'solver': 'lbfgs'})
+
 # 测试集的预测结果
 test_pred = stacker.predict()
 """生成提交格式的DataFrame"""

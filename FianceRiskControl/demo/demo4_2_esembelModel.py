@@ -1,37 +1,15 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# author： Leo
-# datetime： 2022/4/23 11:55
-
-
-
-"""
-ValueError: Input contains NaN,
-infinity or a value too large for dtype('float32').
-
-"""
-# ------------------模型训练----------------------------
-import pandas as pd
-from sklearn.model_selection import KFold
-from sklearn.metrics import roc_auc_score
-
+# -*- coding: utf-8 -*- 
+# @Time : 2022/10/28 23:29 
+# @Author : YeMeng 
+# @File : demo4_2_esembelModelSample.py 
+# @contact: 876720687@qq.com
 import numpy as np
-import xgboost as xgb
+import pandas as pd
+from catboost import CatBoostClassifier
+from sklearn.metrics import roc_auc_score
+from sklearn.model_selection import KFold, train_test_split
 import lightgbm as lgb
-from catboost import CatBoostRegressor, CatBoostClassifier
 
-
-
-# TODO 全局运行
-# train_data = pd.read_csv("../data/train_data.csv")
-# y_train = train_data['isDefault']
-# x_train = train_data.drop(columns='isDefault', axis=1)
-# x_test = pd.read_csv("x_test.csv")
-
-# x_train, x_test, y_train, y_test = train_test_split(x_train, y_train)
-
-
-# TODO 小样本
 data_train = pd.read_csv('../data/train_data.csv')
 data_test_a = pd.read_csv('../data/test_data.csv')
 features = [f for f in data_train.columns if f not in ['id','issueDate','isDefault'] and '_outliers' not in f]
@@ -39,7 +17,7 @@ x_train = data_train[features]
 x_test = data_test_a[features]
 y_train = data_train['isDefault']
 
-
+train_x, val_x, train_y, val_y = train_test_split(x_train, y_train, test_size=0.2)
 
 def cv_model(clf, train_x, train_y, test_x, clf_name):
     folds = 5
@@ -123,6 +101,7 @@ def cv_model(clf, train_x, train_y, test_x, clf_name):
             val_pred = model.predict(val_x)
             test_pred = model.predict(test_x)
 
+
         train[valid_index] = val_pred
         test = test_pred / kf.n_splits
         cv_scores.append(roc_auc_score(val_y, val_pred))
@@ -146,15 +125,12 @@ def lgb_model(x_train, y_train, x_test):
 #     xgb_train, xgb_test = cv_model(xgb, x_train, y_train, x_test, "xgb")
 #     return xgb_train, xgb_test
 #
-#
 # def cat_model(x_train, y_train, x_test):
 #     cat_train, cat_test = cv_model(CatBoostRegressor, x_train, y_train, x_test, "cat")
 #     return cat_train, cat_test
-
-
-
 
 lgb_train, lgb_test = lgb_model(x_train, y_train, x_test)
 # xgb_train, xgb_test = xgb_model(x_train, y_train, x_test)
 # cat_train, cat_test = cat_model(x_train, y_train, x_test)
 
+# ----------------------超参数优化----------------------

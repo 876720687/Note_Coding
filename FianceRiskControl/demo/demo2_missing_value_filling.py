@@ -69,7 +69,8 @@ for data in [data_train, data_test_a]:
 
 
 # -------------------------------------类别型特征处理-----------------------------------
-
+# TODO 这部分内容还有别的处理方式没有？参考
+# https://blog.csdn.net/sinat_26917383/article/details/107851162
 for data in [data_train, data_test_a]:
     data['grade'] = data['grade'].map({'A':1,'B':2,'C':3,'D':4,'E':5,'F':6,'G':7})
 # 类型数在2之上，又不是高维稀疏的,且纯分类特征
@@ -105,9 +106,6 @@ for fea in numerical_fea:
 for fea in numerical_fea:
     data_train = data_train[data_train[fea+'_outliers']=='正常值']
     data_train = data_train.reset_index(drop=True)
-
-
-
 
 
 # Those two is use to output the submission profile

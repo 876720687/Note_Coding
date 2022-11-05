@@ -10,23 +10,41 @@ tokenizer.fit_on_texts(data_v1['verified_reviews'].values)
 X = tokenizer.texts_to_sequences(data['verified_reviews'].values)
 X = pad_sequences(X)
 """
+
+# import os
+# os.environ["MKL_NUM_THREADS"] = '4'
+# os.environ["NUMEXPR_NUM_THREADS"] = '4'
+# os.environ["OMP_NUM_THREADS"] = '4'
+
 import numpy as np
 import pandas as pd
-from keras.preprocessing.text import Tokenizer
-from keras.utils import pad_sequences
-
+import tensorflow as tf
 from sklearn.model_selection import train_test_split
-from tensorflow.python.estimator import keras
+from tensorflow.core.protobuf.config_pb2 import ConfigProto
 from tensorflow.python.keras import Sequential
 from tensorflow.python.keras.layers import Embedding, LSTM, Dense, Dropout
-pd.set_option('display.max_columns',None) # 显示所有列
+from tensorflow.python.keras.preprocessing.sequence import pad_sequences
+from tensorflow.python.keras.preprocessing.text import Tokenizer
+pd.set_option('display.max_columns',None)
 import warnings
+import os
 warnings.filterwarnings('ignore')
+config = ConfigProto()
+config.gpu_options.allow_growth = True
 
+os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+os.environ["CUDA_VISIBLE_DEVICES"] = "1" # 选择ID为1的GPU
+
+
+# -------------------------- input data ----------------
 df = pd.read_csv('./input/train.csv')
 data_test = pd.read_csv('./input/test.csv')
 df0 = pd.read_csv('./input/sample_submission.csv')
 data_test = data_test['full_text']
+
+# -------------------- GPU 加速 ------------------
+
+
 
 # -------------------- 数据向量化 -----------------------
 X_train = df['full_text']
@@ -42,12 +60,12 @@ X_train,X_val,y_train,y_val=train_test_split(X_train,y_train,test_size=0.1)
 # -------------------- 构建模型 -----------------------
 
 model=Sequential()
-model = keras.Sequential()
 # Add an Embedding layer expecting input vocab of size 5000, and
 # output embedding dimension of size 120.
 model.add(Embedding(input_dim=10000, output_dim=120))
 # Add a LSTM layer with 128 internal units.
 model.add(LSTM(128))
+
 # Add a Dense layer with 128 units and activation relu.
 model.add(Dense(128,activation='relu'))
 # Add a Dense layer with 128 units and activation relu.
@@ -76,9 +94,11 @@ model.compile(
     optimizer ='adam'
 )
 
-model.fit(X_train, y_train, epochs = 57)
 
-val_loss=model.evaluate(X_val,y_val)
+with tf.device('/gpu:1'):
+    model.fit(X_train, y_train, epochs = 57)
+
+val_loss = model.evaluate(X_val,y_val)
 
 y_pr=model.predict(data_test)
 

@@ -4,22 +4,18 @@
 # @File : demo2.py 
 # @contact: 876720687@qq.com
 import numpy as np
-from nltk import grammar
 from sklearn.feature_extraction.text import TfidfVectorizer
 import lightgbm as lgb
 import pandas as pd
 from sklearn.metrics import mean_squared_error
 from tqdm import tqdm
-
-pd.set_option('display.max_columns',None) # 显示所有列
+pd.set_option('display.max_columns',None)
 
 # --------------------- load data -------------------
 data=pd.read_csv("./input/train.csv",nrows=1000)
 testdata = pd.read_csv("./input/test.csv")
 
-data[["cohesion","syntax","vocabulary","phraseology","grammar","conventions"]].corr()
-
-
+# data[["cohesion","syntax","vocabulary","phraseology","grammar","conventions"]].corr()
 
 # split data for offline testing randomly
 mask = np.random.rand(len(data))<0.8
@@ -32,9 +28,9 @@ valid_transformed = vectorizer.transform(validdf.full_text)
 
 
 # -------------------- model training & validation  ---------------------
+model = lgb.LGBMRegressor()
 for col in tqdm(["cohesion","syntax","vocabulary","phraseology","grammar","conventions"]):
-    model = lgb.LGBMRegressor()
-    model = model.fit(train_transformed,traindf[col])
+    model.fit(train_transformed, traindf[col])
     validdf[f"{col}_preds"] = model.predict(valid_transformed)
 
 
@@ -44,14 +40,14 @@ for col in tqdm(["cohesion","syntax","vocabulary","phraseology","grammar","conve
     print(f"{col}:", error)
     errors.append(error)
 print(f"MCRMSE{col}:", np.mean(error))
-
-# ------------- full data training and submission ---------------
+# ------------- Whole process & full data training and submission ---------------
+# 全量训练
 data_transformed = vectorizer.fit_transform(data.full_text)
 test_transformed = vectorizer.transform(testdata.full_text)
 
+model = lgb.LGBMRegressor()
 for col in tqdm(["cohesion","syntax","vocabulary","phraseology","grammar","conventions"]):
-    model = lgb.LGBMRegressor()
-    model = model.fit(data_transformed,data[col])
+    model.fit(data_transformed,data[col])
     testdata[f"{col}"] = model.predict(test_transformed)
 
 testdata.drop(columns=["full_text"],inplace=True)

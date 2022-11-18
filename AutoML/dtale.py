@@ -14,6 +14,7 @@ print(sns.get_dataset_names())
 df = sns.load_dataset("titanic")
 
 ### Importing The Library
+# pip install pandas-profiling==3.1.0
 import dtale
 
 ### Generating Quick Summary

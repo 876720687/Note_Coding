@@ -292,8 +292,7 @@ def get_f11_threshold(train_sub, train_label):
     return threshold
 
 
-#%%
-# 初始化变量
+# -------------------------- 初始化变量 --------------------------
 lr = 0.01
 train_time = date(2018,4,2)
 dev_time = date(2018,4,9)
@@ -304,8 +303,7 @@ candidate_set = "all"
 class_feature = ["age", "sex", "city_level", "province", "city","county", "cate"]
 
 
-#%%
-# 加载训练集合
+# -------------------------- 加载训练集合 --------------------------
 action_table = pd.read_hdf(base_file_path + "jdata_action.h5")
 action_table['action_time'] = action_table['action_time'].apply(lambda s:date(*(int(i) for i in s.split(" ")[0].split("-"))))
 product_table = pd.read_hdf(base_file_path + "jdata_product.h5")
@@ -314,8 +312,8 @@ action_table = action_table[['user_id', 'cate', "shop_id","action_time", "type"]
 del product_table
 gc.collect()
 
-#%%
-# 加载目标区间购买的组合
+
+# -------------------------- 加载目标区间购买的组合 --------------------------
 train_label = get_label_user_cate_shop(action_table, train_time)
 dev_label = get_label_user_cate_shop(action_table, dev_time)
 
@@ -340,7 +338,7 @@ dev_label = get_label_user_cate_shop(action_table, dev_time)
 
 train = get_user_cate_data(action_table, train_time, target_info=train_label, windows=windows, before_days=before_days, candidate_set=candidate_set)
 dev = get_user_cate_data(action_table, dev_time, target_info=dev_label, windows=windows, before_days=before_days, candidate_set=candidate_set)
-test = get_user_cate_data(action_table, test_time,model="test",target_info=None, windows=windows, before_days=before_days, candidate_set=candidate_set)
+test = get_user_cate_data(action_table, test_time, model="test", target_info=None, windows=windows, before_days=before_days, candidate_set=candidate_set)
 
 
 params_pre = {
@@ -391,7 +389,6 @@ test['model2tpre'] = model.predict(test.drop(['user_id', "label", "time_area"], 
 
 
 # f11
-#%%
 model = CvModel(params_1, 5, 10000, 50, class_feature, mark="best_model_cv_f11_9")
 
 

@@ -291,7 +291,6 @@ def get_f11_threshold(train_sub, train_label):
     return threshold
 
 
-#%%
 # 初始化变量
 lr = 0.01
 train_time = date(2018,4,2)
@@ -302,10 +301,9 @@ before_days = 30
 candidate_set = "all"
 class_feature = ["age", "sex", "city_level", "province", "city","county", "cate"]
 
-
-#%%
 # 加载训练集合
-action_table = pd.read_hdf(base_file_path + "jdata_action.h5")
+action_table_path = base_file_path + "jdata_action.h5"
+action_table = pd.read_hdf(action_table_path)
 action_table['action_time'] = action_table['action_time'].apply(lambda s:date(*(int(i) for i in s.split(" ")[0].split("-"))))
 product_table = pd.read_hdf(base_file_path + "jdata_product.h5")
 action_table = pd.merge(action_table, product_table, how="left", on="sku_id")
@@ -313,12 +311,10 @@ action_table = action_table[['user_id', 'cate', "shop_id","action_time", "type"]
 del product_table
 gc.collect()
 
-#%%
 # 加载目标区间购买的组合
 train_label = get_label_user_cate_shop(action_table, train_time)
 dev_label = get_label_user_cate_shop(action_table, dev_time)
 
-#%%
 # 加载user-cate 特征
 # user_cate 的训练集
 # user_id， cate， user_id-cate

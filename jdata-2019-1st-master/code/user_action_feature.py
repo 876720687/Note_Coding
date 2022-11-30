@@ -47,14 +47,14 @@ def avg_shop_snap_day(df, sdf, columns, name=[]):
     avg_shop_snap_day['diff_shop'] = (avg_shop_snap_day['action_time'] - avg_shop_snap_day['next_action_time']).apply(lambda s:s.days)
     if not name:
         name = ["_".join(columns) + "shop_snap_days"]
-    avg_shop_snap_day = avg_shop_snap_day.groupby(columns)['diff_shop'].agg({
-        f"{name[0]}_min":np.min,
-        f"{name[0]}_max":np.max,
-        f"{name[0]}_avg":np.mean,
-        f"{name[0]}_std": "std",
-        f"{name[0]}_median":np.median,
-        f"{name[0]}_before":lambda s:s.tolist()[-1]
-    }).reset_index()
+    avg_shop_snap_day = avg_shop_snap_day.groupby(columns)['diff_shop'].agg([
+        (f"{name[0]}_min", np.min),
+        (f"{name[0]}_max", np.max),
+        (f"{name[0]}_avg", np.mean),
+        (f"{name[0]}_std", "std"),
+        (f"{name[0]}_median", np.median),
+        (f"{name[0]}_before", lambda s:s.tolist()[-1])
+    ]).reset_index()
     print(avg_shop_snap_day.head())
     df = pd.merge(df, avg_shop_snap_day, how="left", on=columns)
     return df
@@ -264,8 +264,9 @@ def extract_user_action_feature(target_date):
 
     print("用户购买的商品 类别 是 店铺的主营商品 的概率")
     # 用户购买的商品 类别 是 店铺的主营商品 的概率
-    sub = action[action['type'] == 2][['user_id','cate_is_shop_cate']]
-    sub = sub.groupby("user_id")["cate_is_shop_cate"].agg({"counts":"count", "sums":"sum"}).reset_index()
+    sub = action[action['type'] == 2][['user_id', 'cate_is_shop_cate']]
+    sub = sub.groupby("user_id")["cate_is_shop_cate"].agg([("counts", "count"),
+                                                           ("sums", "sum")]).reset_index()
     sub['cate_is_shop_cate_rate'] = sub['sums'] / (sub['counts'] + 1)
     user = pd.merge(user, sub[["user_id", 'cate_is_shop_cate_rate']], how="left", on="user_id")
     user.fillna({"cate_is_shop_cate_rate":0}, inplace=True)
@@ -277,14 +278,14 @@ def extract_user_action_feature(target_date):
     user_shop_diff_market['user_shop_diff_market'] = (
         user_shop_diff_market['action_time'] - user_shop_diff_market['market_time']).apply(lambda s: s.days)
 
-    user_shop_diff_market = user_shop_diff_market[['user_id', "user_shop_diff_market"]].groupby("user_id")["user_shop_diff_market"].agg({
-        "user_shop_diff_market_avg": np.mean,
-        "user_shop_diff_market_median": np.median,
-        "user_shop_diff_market_max": np.max,
-        "user_shop_diff_market_min": np.min,
-        "user_shop_diff_market_std": np.std,
-        "user_shop_diff_market_count":"count"
-    }).reset_index()
+    user_shop_diff_market = user_shop_diff_market[['user_id', "user_shop_diff_market"]].groupby("user_id")["user_shop_diff_market"].agg([
+        ("user_shop_diff_market_avg", np.mean),
+        ("user_shop_diff_market_median", np.median),
+        ("user_shop_diff_market_max", np.max),
+        ("user_shop_diff_market_min", np.min),
+        ("user_shop_diff_market_std", np.std),
+        ("user_shop_diff_market_count", "count")
+    ]).reset_index()
 
     user = pd.merge(user, user_shop_diff_market, how="left", on="user_id")
     user.fillna({"user_shop_diff_market_count":0}, inplace=True)
@@ -296,7 +297,7 @@ def extract_user_action_feature(target_date):
     user['next_shop_day_remove_special_day_in_7'] = np.where((user['next_shop_day_remove_special_day'] <= 7)&(user['next_shop_day_remove_special_day'] >= 0),1,0)
     
     user["shop_active_rate"] = user['shop_user_action_time_nunique'] / user['active_user_time_nunique']
-
+    print("User action feature processing finished and feature data stored!")
     user.to_hdf(feature_path + f'user_feature_{str(target_date)}.h5', key='df', mode='w')
 
 if __name__ == "__main__":

@@ -29,10 +29,16 @@ def label_encoder_2(sum_simple, value_counts):
 def extract_user_base_feature(target_date):
     start_time = time.time()
     user_table = pd.read_hdf(base_file_path + "jdata_user.h5")
-    user_table['user_reg_tm'] = user_table['user_reg_tm'].apply(lambda s:date(*(int(i) for i in s.split(" ")[0].split("-"))))
+    user_table['user_reg_tm'] = user_table['user_reg_tm'].apply(lambda s:date(*(int(i) for i in s.split(" ")[0].split("-")))) # format time
     user_table.drop_duplicates(subset="user_id", inplace=True)
-    user_table.fillna({"age":-1, "sex":user_table['sex'].median(), "user_lv_cd":user_table['user_lv_cd'].median(), "city_level":user_table['city_level'].median(),
-                       "province":user_table['province'].median(), "county":-1, "city":-1}, inplace=True)
+    user_table.fillna({"age":-1,
+                       "sex":user_table['sex'].median(),
+                       "user_lv_cd":user_table['user_lv_cd'].median(),
+                       "city_level":user_table['city_level'].median(),
+                       "province":user_table['province'].median(),
+                       "county":-1,
+                       "city":-1}, inplace=True)
+    # city/county map
     city_map_dict = label_encoder_2(len(user_table), user_table['city'].value_counts())
     user_table['city'] = user_table['city'].apply(lambda s: city_map_dict.get(s))
     county_map_dict = label_encoder_2(len(user_table), user_table['county'].value_counts())

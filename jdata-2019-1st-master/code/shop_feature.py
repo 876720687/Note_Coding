@@ -23,7 +23,8 @@ def get_statistic_info(df, groupby_columns, columns:str, name:str, agg_dict={}):
     for k,v in agg_dict.items():
         default_agg_dict[f"{name}_{k}"] = v
     statistic_info = df.groupby(groupby_columns)[columns].agg(
-        default_agg_dict
+        # default_agg_dict
+        list(default_agg_dict.items())
     ).reset_index()
 
     return statistic_info
@@ -293,9 +294,9 @@ def extract_shop_info(target_day):
     sub_df_mean.columns = ['user_id', "shop_id", "mean_shop_diff"]
     print(sub_df_median.head())
 
-    shop_median_shop_diff =  get_statistic_info(sub_df_median, "shop_id", "median_shop_diff", "shop_median_shop_diff")
+    shop_median_shop_diff = get_statistic_info(sub_df_median, "shop_id", "median_shop_diff", "shop_median_shop_diff")
     print(sub_df_mean.head())
-    shop_mean_shop_diff =  get_statistic_info(sub_df_mean, "shop_id", "mean_shop_diff", "shop_mean_shop_diff")
+    shop_mean_shop_diff = get_statistic_info(sub_df_mean, "shop_id", "mean_shop_diff", "shop_mean_shop_diff")
 
     shop = pd.merge(shop, shop_median_shop_diff, how="left", on="shop_id")
     shop = pd.merge(shop, shop_mean_shop_diff, how="left", on="shop_id")

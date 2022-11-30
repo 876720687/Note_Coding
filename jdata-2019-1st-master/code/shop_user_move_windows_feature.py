@@ -96,7 +96,7 @@ if __name__ == "__main__":
     # print(f"购买过的用户数：{len(shoped_user)}")
     action['action_time'] = action['action_time'].apply(lambda s: date(*(int(i) for i in s.split(" ")[0].split("-"))))
     
-    for i in [date(2018, 4, 16),date(2018, 4, 9)]:
+    for i in [date(2018, 4, 16), date(2018, 4, 9), date(2018, 4, 2)]:
         extract_shop_user_move_windows_feature(action, i, windows=[1, 3, 7, 14, 30])
 
 

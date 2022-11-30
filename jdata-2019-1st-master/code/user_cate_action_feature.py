@@ -175,14 +175,14 @@ def extract_user_cate_feature(target_date, windows=[1, 3, 7, 14, 30]):
     shoped_action = shoped_action[~(shoped_action['before_shop_time'].isnull())]
     shoped_action['diff'] = (shoped_action['action_time'] - shoped_action['before_shop_time']).apply(lambda s:s.days)
 
-    user_cate_shop_span = shoped_action.groupby(['user_id', 'cate'])['diff'].agg({
-        "user_cate_max_diff_day":np.max,
-        "user_cate_min_diff_day":np.min,
-        "user_cate_avg_diff_day":np.mean,
-        "user_cate_median_diff_day":np.median,
-        "user_cate_std_diff_day":np.std,
-        "user_cate_before_diff_day": lambda s:s.tolist()[-1]
-    }).reset_index()
+    user_cate_shop_span = shoped_action.groupby(['user_id', 'cate'])['diff'].agg([
+        ("user_cate_max_diff_day", np.max),
+        ("user_cate_min_diff_day", np.min),
+        ("user_cate_avg_diff_day", np.mean),
+        ("user_cate_median_diff_day", np.median),
+        ("user_cate_std_diff_day", np.std),
+        ("user_cate_before_diff_day", lambda s:s.tolist()[-1])
+    ]).reset_index()
     user_cate_shop_span.columns = ['user_id', 'cate',"user_cate_max_diff_day", "user_cate_min_diff_day", "user_cate_avg_diff_day", "user_cate_median_diff_day", "user_cate_std_diff_day" ,"user_cate_before_diff_day"]
     user_cate = pd.merge(user_cate, user_cate_shop_span, how="left", on=['user_id', 'cate'])
     del user_cate_shop_span
@@ -197,13 +197,13 @@ def extract_user_cate_feature(target_date, windows=[1, 3, 7, 14, 30]):
     shoped_action = shoped_action[~(shoped_action['before_shop_time'].isnull())]
     shoped_action['diff'] = (shoped_action['action_time'] - shoped_action['before_shop_time']).apply(lambda s:s.days)
 
-    user_cate_shop_span = shoped_action.groupby(['user_id', 'cate'])['diff'].agg({
-        "user_cate_min_diff_day": np.min,
-        "user_cate_avg_diff_day": np.mean,
-        "user_cate_median_diff_day": np.median,
-        "user_cate_std_diff_day": np.std,
-        "user_cate_before_diff_day": lambda s:s.tolist()[-1]
-    }).reset_index()
+    user_cate_shop_span = shoped_action.groupby(['user_id', 'cate'])['diff'].agg([
+        ("user_cate_min_diff_day", np.min),
+        ("user_cate_avg_diff_day", np.mean),
+        ("user_cate_median_diff_day", np.median),
+        ("user_cate_std_diff_day", np.std),
+        ("user_cate_before_diff_day", lambda s:s.tolist()[-1])
+    ]).reset_index()
     user_cate_shop_span.columns = ['user_id', 'cate', "user_cate_min_diff_day_del_same_day",
                                    "user_cate_avg_diff_day_del_same_day", "user_cate_median_diff_day_del_same_day", "user_cate_std_diff_day_del_same_day", "user_cate_before_diff_day_del_same_day"]
     user_cate = pd.merge(user_cate, user_cate_shop_span, how="left", on=['user_id', 'cate'])
@@ -268,6 +268,7 @@ def extract_user_cate_feature(target_date, windows=[1, 3, 7, 14, 30]):
                     user_cate["median_diff_shop_day_substruct_last_shop_to_target_del_same_shop_days"] >= 0), 1, 0)
     user_cate = reduce_mem_usage(user_cate)
     print(f"extract {str(target_date)} user cate action feature...")
+    print("succeed")
     user_cate.to_hdf(feature_path + f"user_cate_feature_{str(target_date)}.h5", key='df', mode='w')
 
 if __name__ == "__main__":

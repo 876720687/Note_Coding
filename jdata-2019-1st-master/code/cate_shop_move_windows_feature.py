@@ -75,6 +75,7 @@ def extract_cate_shop_move_windows_feature(date, target_days, windows):
         assert len(move_shop_feature) == len(move_shop_feature[["cate","shop_id"]].drop_duplicates())
 
         print(f"extract {str(target_days)}, {days} complete...")
+        print("succeed!")
         move_shop_feature.to_hdf(feature_path + f"move_window_cate_shop_feature_{str(target_days)}_{days}.h5", key='df', mode='w')
 
 

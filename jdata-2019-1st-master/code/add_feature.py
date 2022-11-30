@@ -109,6 +109,7 @@ def add_cate_shop_feature(action_table, target_time):
     cate_shop.fillna({"shop_is_cate_shop_top3_before_week":0}, inplace=True)
     assert len(cate_shop) == len(cate_shop[['cate',"shop_id"]].drop_duplicates())
     del cate_shop_top3_before_week
+    print("Success!")
     cate_shop.to_hdf(feature_path + f"add_cate_shop_feature_{str(target_time)}.h5", key='df', mode='w')
     return cate_shop
     #

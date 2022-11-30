@@ -27,7 +27,8 @@ def get_statistic_info(df, groupby_columns, columns:str, name:str, agg_dict={}):
     for k,v in agg_dict.items():
         default_agg_dict[f"{name}_{k}"] = v
     statistic_info = df.groupby(groupby_columns)[columns].agg(
-        default_agg_dict
+        # default_agg_dict
+        list(default_agg_dict.items())
     ).reset_index()
 
     return statistic_info

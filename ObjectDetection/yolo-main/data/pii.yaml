@@ -1,0 +1,7 @@
+train: /root/autodl-tmp/PCB_DATASET/trainval.txt
+val: /root/autodl-tmp/PCB_DATASET/test.txt
+test:
+
+# Classes
+nc: 8  # number of classes
+names: ['knife', 'battery', 'plasticBottleWithaNozzle', 'USBFlashDisk', 'seal', 'scissors','pressure','lighter','scissors']  # class names

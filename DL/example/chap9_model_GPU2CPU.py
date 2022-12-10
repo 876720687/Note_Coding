@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Sat Sep  7 16:01:50 2019
 
-@author: daitu
-"""
 
 #%% 导入本章所需要的模块
 ## 导入本章所需要的模块

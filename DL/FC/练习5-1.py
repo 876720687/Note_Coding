@@ -5,23 +5,27 @@ from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 
 # 定义一些超参数
-batch_size = 64
-learning_rate = 0.02
+batch_size = 32
+learning_rate = 0.01
 
 class Batch_Net(nn.Module):
     """
     在上面的Activation_Net的基础上，增加了一个加快收敛速度的方法——批标准化
     """
-    def __init__(self, in_dim, n_hidden_1, n_hidden_2, out_dim):
+    def __init__(self, in_dim, n_hidden_1, n_hidden_2, n_hidden_3, n_hidden_4,out_dim):
         super(Batch_Net, self).__init__()
         self.layer1 = nn.Sequential(nn.Linear(in_dim, n_hidden_1), nn.BatchNorm1d(n_hidden_1), nn.ReLU(True))
         self.layer2 = nn.Sequential(nn.Linear(n_hidden_1, n_hidden_2), nn.BatchNorm1d(n_hidden_2), nn.ReLU(True))
-        self.layer3 = nn.Sequential(nn.Linear(n_hidden_2, out_dim))
+        self.layer3 = nn.Sequential(nn.Linear(n_hidden_2, n_hidden_3), nn.BatchNorm1d(n_hidden_3), nn.ReLU(True))
+        self.layer4 = nn.Sequential(nn.Linear(n_hidden_3, n_hidden_4), nn.BatchNorm1d(n_hidden_4), nn.ReLU(True))
+        self.layer5 = nn.Sequential(nn.Linear(n_hidden_4, out_dim))
 
     def forward(self, x):
         x = self.layer1(x)
         x = self.layer2(x)
         x = self.layer3(x)
+        x = self.layer4(x)
+        x = self.layer5(x)
         return x
 
 # 数据预处理。transforms.ToTensor()将图片转换成PyTorch中处理的对象Tensor,并且进行标准化（数据在0~1之间）
@@ -41,9 +45,7 @@ test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 # 选择模型
 #model = net.simpleNet(28 * 28, 300, 100, 10)
 # model = Activation_Net(28 * 28, 300, 100, 10)
-model = Batch_Net(28 * 28, 300, 100, 10)
-
-
+model = Batch_Net(28 * 28, 400, 300, 200, 100, 10)
 #if torch.cuda.is_available():
  #   model = model.cuda()
 

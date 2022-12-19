@@ -4,6 +4,7 @@ import torch.nn as nn
 import torch.optim as optim
 from dataloader import dataloader
 
+
 class generator(nn.Module):
     # Architecture : FC1024_BR-FC7x7x128_BR-(64)4dc2s_BR-(1)4dc2s_S
     def __init__(self, input_dim=100, output_dim=1, input_size=32, class_num=10):
@@ -39,6 +40,7 @@ class generator(nn.Module):
         x = self.deconv(x)
         return x
 
+
 class discriminator(nn.Module):
     # Architecture : (64)4c2s-(128)4c2s_BL-FC1024_BL-FC1_S
     def __init__(self, input_dim=1, output_dim=1, input_size=32, class_num=10):
@@ -73,6 +75,7 @@ class discriminator(nn.Module):
         x = self.fc(x)
         return x
 
+
 class CGAN(object):
     def __init__(self, args):
         # parameters
@@ -94,8 +97,10 @@ class CGAN(object):
         data = self.data_loader.__iter__().__next__()[0]
 
         # networks init
-        self.G = generator(input_dim=self.z_dim, output_dim=data.shape[1], input_size=self.input_size, class_num=self.class_num)
-        self.D = discriminator(input_dim=data.shape[1], output_dim=1, input_size=self.input_size, class_num=self.class_num)
+        self.G = generator(input_dim=self.z_dim, output_dim=data.shape[1], input_size=self.input_size,
+                           class_num=self.class_num)
+        self.D = discriminator(input_dim=data.shape[1], output_dim=1, input_size=self.input_size,
+                               class_num=self.class_num)
         self.G_optimizer = optim.Adam(self.G.parameters(), lr=args.lrG, betas=(args.beta1, args.beta2))
         self.D_optimizer = optim.Adam(self.D.parameters(), lr=args.lrD, betas=(args.beta1, args.beta2))
 
@@ -114,9 +119,9 @@ class CGAN(object):
         # fixed noise & condition
         self.sample_z_ = torch.zeros((self.sample_num, self.z_dim))
         for i in range(self.class_num):
-            self.sample_z_[i*self.class_num] = torch.rand(1, self.z_dim)
+            self.sample_z_[i * self.class_num] = torch.rand(1, self.z_dim)
             for j in range(1, self.class_num):
-                self.sample_z_[i*self.class_num + j] = self.sample_z_[i*self.class_num]
+                self.sample_z_[i * self.class_num + j] = self.sample_z_[i * self.class_num]
 
         temp = torch.zeros((self.class_num, 1))
         for i in range(self.class_num):
@@ -124,7 +129,7 @@ class CGAN(object):
 
         temp_y = torch.zeros((self.sample_num, 1))
         for i in range(self.class_num):
-            temp_y[i*self.class_num: (i+1)*self.class_num] = temp
+            temp_y[i * self.class_num: (i + 1) * self.class_num] = temp
 
         self.sample_y_ = torch.zeros((self.sample_num, self.class_num)).scatter_(1, temp_y.type(torch.LongTensor), 1)
         if self.gpu_mode:
@@ -152,8 +157,11 @@ class CGAN(object):
                     break
 
                 z_ = torch.rand((self.batch_size, self.z_dim))
-                y_vec_ = torch.zeros((self.batch_size, self.class_num)).scatter_(1, y_.type(torch.LongTensor).unsqueeze(1), 1)
-                y_fill_ = y_vec_.unsqueeze(2).unsqueeze(3).expand(self.batch_size, self.class_num, self.input_size, self.input_size)
+                y_vec_ = torch.zeros((self.batch_size, self.class_num)).scatter_(1,
+                                                                                 y_.type(torch.LongTensor).unsqueeze(1),
+                                                                                 1)
+                y_fill_ = y_vec_.unsqueeze(2).unsqueeze(3).expand(self.batch_size, self.class_num, self.input_size,
+                                                                  self.input_size)
                 if self.gpu_mode:
                     x_, z_, y_vec_, y_fill_ = x_.cuda(), z_.cuda(), y_vec_.cuda(), y_fill_.cuda()
                 # update D network
@@ -177,15 +185,17 @@ class CGAN(object):
                 self.G_optimizer.step()
                 if ((iter + 1) % 100) == 0:
                     print("Epoch: [%2d] [%4d/%4d] D_loss: %.8f, G_loss: %.8f" %
-                          ((epoch + 1), (iter + 1), self.data_loader.dataset.__len__() // self.batch_size, D_loss.item(), G_loss.item()))
+                          (
+                          (epoch + 1), (iter + 1), self.data_loader.dataset.__len__() // self.batch_size, D_loss.item(),
+                          G_loss.item()))
 
             self.train_hist['per_epoch_time'].append(time.time() - epoch_start_time)
             with torch.no_grad():
-                self.visualize_results((epoch+1))
+                self.visualize_results((epoch + 1))
 
         self.train_hist['total_time'].append(time.time() - start_time)
         print("Avg one epoch time: %.2f, total %d epochs time: %.2f" % (np.mean(self.train_hist['per_epoch_time']),
-              self.epoch, self.train_hist['total_time'][0]))
+                                                                        self.epoch, self.train_hist['total_time'][0]))
 
         print("Training finish!... save training results")
 
@@ -195,8 +205,6 @@ class CGAN(object):
                                  self.epoch)
 
         utils.loss_plot(self.train_hist, os.path.join(self.save_dir, self.dataset, self.model_name), self.model_name)
-
-
 
     def visualize_results(self, epoch, fix=True):
         self.G.eval()
@@ -210,7 +218,8 @@ class CGAN(object):
             samples = self.G(self.sample_z_, self.sample_y_)
         else:
             """ random noise """
-            sample_y_ = torch.zeros(self.batch_size, self.class_num).scatter_(1, torch.randint(0, self.class_num - 1, (self.batch_size, 1)).type(torch.LongTensor), 1)
+            sample_y_ = torch.zeros(self.batch_size, self.class_num).scatter_(1, torch.randint(0, self.class_num - 1, (
+            self.batch_size, 1)).type(torch.LongTensor), 1)
             sample_z_ = torch.rand((self.batch_size, self.z_dim))
             if self.gpu_mode:
                 sample_z_, sample_y_ = sample_z_.cuda(), sample_y_.cuda()
@@ -228,38 +237,23 @@ class CGAN(object):
 
                           self.result_dir + '/' + self.dataset + '/' + self.model_name + '/' + self.model_name + '_epoch%03d' % epoch + '.png')
 
-
-
     def save(self):
 
         save_dir = os.path.join(self.save_dir, self.dataset, self.model_name)
 
-
-
         if not os.path.exists(save_dir):
-
             os.makedirs(save_dir)
-
-
 
         torch.save(self.G.state_dict(), os.path.join(save_dir, self.model_name + '_G.pkl'))
 
         torch.save(self.D.state_dict(), os.path.join(save_dir, self.model_name + '_D.pkl'))
 
-
-
         with open(os.path.join(save_dir, self.model_name + '_history.pkl'), 'wb') as f:
-
             pickle.dump(self.train_hist, f)
-
-
 
     def load(self):
 
         save_dir = os.path.join(self.save_dir, self.dataset, self.model_name)
-
-
-
         self.G.load_state_dict(torch.load(os.path.join(save_dir, self.model_name + '_G.pkl')))
 
         self.D.load_state_dict(torch.load(os.path.join(save_dir, self.model_name + '_D.pkl')))

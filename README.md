@@ -3,10 +3,14 @@ Welcome to join us! Enjoy the coding journey!
 This repository is some competitions and tips i've learned in my journey of learing AI, including ML,DL,Kaggle Competition.
 Thanks for reading and if you have any question you can contact me!
 
-
 项目将会继续更新并且分化到不同的仓库当中,目前一共分为三部分内容：
+项目的总体目录： [Feishu Link history](https://h1dgq3evaad.feishu.cn/docx/Vh1idmfaFoWP9Wxpa1Hczp5WnAe?from=from_copylink)
+
+
+
+
+
 ## Competition
- [Feishu Link history](https://h1dgq3evaad.feishu.cn/docx/Vh1idmfaFoWP9Wxpa1Hczp5WnAe?from=from_copylink)
 
 | Competition Name                                                                                              | Explain                 |
 |---------------------------------------------------------------------------------------------------------------|-------------------------|
@@ -22,6 +26,10 @@ Thanks for reading and if you have any question you can contact me!
 | 高校大数据挑战赛                                                                                                      | Top 2 solution          |
 
 
+
+
+
+
 ## Project 
 内容在更新当中，暂时仅对协作者公开
 对应飞书文档中的MLOPS
@@ -29,6 +37,12 @@ Thanks for reading and if you have any question you can contact me!
 1. 可扩展式隐私加密视觉算法原型设计
 2. 可扩展式AI计算平台
 3. RAG增强LLM交互式平台
+
+
+
+
+
+
 
 
 

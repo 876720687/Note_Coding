@@ -32,7 +32,7 @@ Thanks for reading and if you have any question you can contact me!
 
 ## Project 
 内容在更新当中，暂时仅对协作者公开
-对应飞书文档中的MLOPS
+对应飞书文档中的[项目List](https://h1dgq3evaad.feishu.cn/docx/JIyPd7EKdogrGAxrWZScQawInef?from=from_copylink)
 主要方向：
 1. 可扩展式隐私加密视觉算法原型设计
 2. 可扩展式AI计算平台
@@ -51,4 +51,5 @@ Thanks for reading and if you have any question you can contact me!
 1. [基础知识](https://h1dgq3evaad.feishu.cn/docx/K5kfdQpFVoBhw5xIaFncVCfMncf) 
 2. [CV-research](https://h1dgq3evaad.feishu.cn/docx/PCR9dBU8WowXeRxXCTZcz6OnnZc?from=from_copylink) 
 3. [NLP-research](https://h1dgq3evaad.feishu.cn/docx/PuFTdEEyLo8X6GxADNrcWFJVn1e?from=from_copylink) 
-4. [RL-research](https://h1dgq3evaad.feishu.cn/docx/PaIBdB3RCoo8NQxZFGxchKwlnfh?from=from_copylink) 
+4. [RL-research](https://h1dgq3evaad.feishu.cn/docx/PaIBdB3RCoo8NQxZFGxchKwlnfh?from=from_copylink)
+5. [云计算技术](https://h1dgq3evaad.feishu.cn/docx/Z29Sda30coOUyExyhR9ctmFmnHf?from=from_copylink)

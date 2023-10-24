@@ -14,16 +14,16 @@ Thanks for reading and if you have any question you can contact me!
 
 | Competition Name                                                                                              | Explain                 |
 |---------------------------------------------------------------------------------------------------------------|-------------------------|
-| Optiver 2023                                                                                                  | 进行当中                    |
-| LLMsc                                                                                                         | Finished.               |
+| Optiver 2023                                                                                                  | 进行当中                  |
+| [LLMsc](https://h1dgq3evaad.feishu.cn/docx/TuVrdlWa9ofuB9x5SL0cTpU0nlh?from=from_copylink)                    | Finished.               |
 | [AMP](https://h1dgq3evaad.feishu.cn/docx/Hh3hdPAEvoWgdlxSqOecUP2xnMf?from=from_copylink)                      | Top3 solution           |
 | [Home Credit Default Risk](https://h1dgq3evaad.feishu.cn/docx/NN9EdDLhIoOw1TxOMD3cAjU8nUS?from=from_copylink) | Top4 solution           |
 | [H&M](https://h1dgq3evaad.feishu.cn/docx/EsC3d6flfoLH1Jx6jPQcuipKnI9?from=from_copylink)                      | Sliver Reward           |
 | [Student Performance](https://h1dgq3evaad.feishu.cn/docx/Lvkldbw94oqFJGxJe9GcGiORnrN?from=from_copylink)      | Multimodal, unorganized |
 | [ICR](https://h1dgq3evaad.feishu.cn/docx/KtBsdfxbDoPWraxxGSXcW1ctn3k?from=from_copylink)                      | Top5%, Bronze Reward    |
 | [JXP](https://h1dgq3evaad.feishu.cn/docx/ZXPBdS4nMo527cxLuppcaOMCnZS?from=from_copylink)                      | Beyond First Place      |
-| [FRC天池金融风控预测](https://h1dgq3evaad.feishu.cn/docx/R1INdBOcfozvoMxUYlecIjWAnCd?from=from_copylink)              | My First ML Competition |
-| 高校大数据挑战赛                                                                                                      | Top 2 solution          |
+| [FRC天池金融风控预测](https://h1dgq3evaad.feishu.cn/docx/R1INdBOcfozvoMxUYlecIjWAnCd?from=from_copylink)         | My First ML Competition |
+| 高校大数据挑战赛                                                                                                 | Top 2 solution          |
 
 
 
@@ -37,7 +37,7 @@ Thanks for reading and if you have any question you can contact me!
 1. 可扩展式隐私加密视觉算法原型设计
 2. 可扩展式AI计算平台
 3. RAG增强LLM交互式平台
-
+4. Cuda加速&模型多线程硬件部署
 
 
 

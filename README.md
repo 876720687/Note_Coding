@@ -35,10 +35,8 @@ Thanks for reading and if you have any question you can contact me!
 对应飞书文档中的[项目List](https://h1dgq3evaad.feishu.cn/docx/JIyPd7EKdogrGAxrWZScQawInef?from=from_copylink)
 主要方向：
 1. 可扩展式隐私加密视觉算法原型设计
-2. 可扩展式AI计算平台
-3. RAG增强LLM交互式平台
-4. Cuda加速&模型多线程硬件部署
-
+2. 可扩展式RAG增强LLM交互式平台
+3. Cuda加速&模型多线程硬件部署
 
 
 
